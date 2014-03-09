@@ -34,3 +34,9 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# temp vim files
+*.swp
+
+# hidden directory
+.ropeproject/*
