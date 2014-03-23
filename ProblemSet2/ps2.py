@@ -9,7 +9,7 @@ import pylab
 # For Python 2.7:
 from ps2_verify_movement27 import testRobotMovement
 
-# If you get a "Bad magic number" ImportError, you are not using 
+# If you get a "Bad magic number" ImportError, you are not using
 # Python 2.7 and using most likely Python 2.6:
 
 
@@ -24,13 +24,13 @@ class Position(object):
         """
         self.x = x
         self.y = y
-        
+
     def getX(self):
         return self.x
-    
+
     def getY(self):
         return self.y
-    
+
     def getNewPosition(self, angle, speed):
         """
         Computes and returns the new Position after a single clock-tick has
@@ -54,7 +54,7 @@ class Position(object):
         new_y = old_y + delta_y
         return Position(new_x, new_y)
 
-    def __str__(self):  
+    def __str__(self):
         return "(%0.2f, %0.2f)" % (self.x, self.y)
 
 
@@ -76,8 +76,11 @@ class RectangularRoom(object):
         width: an integer > 0
         height: an integer > 0
         """
-        raise NotImplementedError
-    
+
+        self.width = width
+        self.height = height
+        self.cleanTiles = []
+
     def cleanTileAtPosition(self, pos):
         """
         Mark the tile under the position POS as cleaned.
@@ -86,7 +89,9 @@ class RectangularRoom(object):
 
         pos: a Position
         """
-        raise NotImplementedError
+        tile = (math.floor(pos.getX()), math.floor(pos.getY()))
+        if tile not in self.cleanTiles:
+            self.cleanTiles.append(tile)
 
     def isTileCleaned(self, m, n):
         """
@@ -98,15 +103,17 @@ class RectangularRoom(object):
         n: an integer
         returns: True if (m, n) is cleaned, False otherwise
         """
-        raise NotImplementedError
-    
+
+        return (m, n) in self.cleanTiles
+
     def getNumTiles(self):
         """
         Return the total number of tiles in the room.
 
         returns: an integer
         """
-        raise NotImplementedError
+
+        return self.width * self.height
 
     def getNumCleanedTiles(self):
         """
@@ -114,7 +121,8 @@ class RectangularRoom(object):
 
         returns: an integer
         """
-        raise NotImplementedError
+
+        return len(self.cleanTiles)
 
     def getRandomPosition(self):
         """
@@ -122,7 +130,9 @@ class RectangularRoom(object):
 
         returns: a Position object.
         """
-        raise NotImplementedError
+
+        return Position(random.uniform(0, self.width),
+                        random.uniform(0, self.height))
 
     def isPositionInRoom(self, pos):
         """
@@ -131,8 +141,9 @@ class RectangularRoom(object):
         pos: a Position object.
         returns: True if pos is in the room, False otherwise.
         """
-        raise NotImplementedError
 
+        return ((0 <= pos.getX() < self.width) and
+                (0 <= pos.getY() < self.height))
 
 class Robot(object):
     """
@@ -162,7 +173,7 @@ class Robot(object):
         returns: a Position object giving the robot's position.
         """
         raise NotImplementedError
-    
+
     def getRobotDirection(self):
         """
         Return the direction of the robot.
@@ -195,6 +206,7 @@ class Robot(object):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
+
         raise NotImplementedError # don't change this!
 
 
@@ -280,7 +292,7 @@ def showPlot1(title, x_label, y_label):
     pylab.ylabel(y_label)
     pylab.show()
 
-    
+
 def showPlot2(title, x_label, y_label):
     """
     What information does the plot produced by this function tell you?
@@ -301,7 +313,7 @@ def showPlot2(title, x_label, y_label):
     pylab.xlabel(x_label)
     pylab.ylabel(y_label)
     pylab.show()
-    
+
 
 # === Problem 5
 #
