@@ -339,7 +339,7 @@ def showPlot1(title, x_label, y_label):
     pylab.ylabel(y_label)
     pylab.show()
 
-
+# showPlot1("Times it takes for 1-10 robots to clean 80% of the room", 'number of robots', 'time-steps')
 def showPlot2(title, x_label, y_label):
     """
     What information does the plot produced by this function tell you?
@@ -361,6 +361,7 @@ def showPlot2(title, x_label, y_label):
     pylab.ylabel(y_label)
     pylab.show()
 
+# showPlot2('Times it takes to two robots to clean simultaniously 80% of various shaped rooms', 'Aspect Ratio', 'Time steps')
 
 # === Problem 5
 #
