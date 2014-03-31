@@ -288,7 +288,7 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
 
 
 # Uncomment this line to see how much your simulation takes on average
-# print  runSimulation(5, 1.0, 10, 10, 0.75, 30, StandardRobot)
+# print runSimulation(5, 1.0, 10, 10, 0.75, 30, StandardRobot)
 
 
 # === Problem 4
@@ -304,8 +304,21 @@ class RandomWalkRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        raise NotImplementedError
 
+        pos = self.getRobotPosition()
+        while True:
+            self.setRobotDirection(random.randrange(360))
+            newpos = pos.getNewPosition(self.getRobotDirection(), self.speed)
+            if self.room.isPositionInRoom(newpos):
+                self.setRobotPosition(newpos)
+                self.room.cleanTileAtPosition(newpos)
+                break
+
+# Uncomment this line to see your implementation of StandardRobot in action!
+# testRobotMovement(RandomWalkRobot, RectangularRoom)
+# Uncomment this line to see how much your simulation takes on average
+#print runSimulation(5, 1.0, 10, 10, 0.75, 30, StandardRobot)
+#print runSimulation(5, 1.0, 10, 10, 0.75, 30, RandomWalkRobot)
 
 def showPlot1(title, x_label, y_label):
     """
