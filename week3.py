@@ -1,0 +1,12 @@
+# Problem 3
+def stdDevOfLengths(L):
+    if L:
+        n = len(L)
+        u = len(''.join(L)) / float(n)
+        tmp = 0
+        for s in L:
+            tmp += (len(s) - u) ** 2
+
+        return (tmp / n) ** 0.5
+    else:
+        return float('NaN')
