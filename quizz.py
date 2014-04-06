@@ -13,3 +13,10 @@ def sampleQuizzes():
         if grade >= 70 and grade <= 75:
             yes += 1
     return yes / float(numTrials)
+
+
+def probTest(limit):
+    rolls = 0
+    while (1 / 6.0) * (5 / 6.0) ** rolls >= limit:
+        rolls += 1
+    return rolls + 1
