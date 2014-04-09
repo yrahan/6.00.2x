@@ -269,7 +269,7 @@ class ResistantVirus(SimpleVirus):
         otherwise.
         """
 
-        return self.resistances[drug]
+        return self.resistances.get(drug)
 
     def reproduce(self, popDensity, activeDrugs):
         """
@@ -316,17 +316,17 @@ class ResistantVirus(SimpleVirus):
         NoChildException if this virus particle does not reproduce.
         """
 
-        isResistantToAll = (not(True in [self.isResistantTo(drug)
-                                         for drug in activeDrugs]))
+        isResistantToAll = (not(False in [self.isResistantTo(drug)
+                                          for drug in activeDrugs]))
         isReproducing = (random.random() <
                          self.maxBirthProb * (1 - popDensity))
         if isResistantToAll and isReproducing:
             offspring_resistance = self.resistances.copy()
             for drug, resistance in self.resistances.iteritems():
                 if (random.random() < self.mutProb):
-                    offspring_resistance[drug] = resistance
-                else:
                     offspring_resistance[drug] = not(resistance)
+                else:
+                    offspring_resistance[drug] = resistance
             return ResistantVirus(self.maxBirthProb, self.clearProb,
                                   offspring_resistance, self.mutProb)
         else:
