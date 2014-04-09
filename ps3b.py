@@ -351,22 +351,24 @@ class TreatedPatient(Patient):
         maxPop: The  maximum virus population for this patient (an integer)
         """
 
-        # TODO
-
+        Patient.__init__(self, viruses, maxPop)
+        self.administeredDrugs = []
 
     def addPrescription(self, newDrug):
         """
         Administer a drug to this patient. After a prescription is added, the
         drug acts on the virus population for all subsequent time steps. If the
-        newDrug is already prescribed to this patient, the method has no effect.
+        newDrug is already prescribed to this patient, the method has
+        no effect.
 
         newDrug: The name of the drug to administer to the patient (a string).
 
-        postcondition: The list of drugs being administered to a patient is updated
+        postcondition: The list of drugs being administered to a patient
+        is updated
         """
 
-        # TODO
-
+        if newDrug not in self.administeredDrugs:
+            self.administeredDrugs.append(newDrug)
 
     def getPrescriptions(self):
         """
@@ -376,8 +378,7 @@ class TreatedPatient(Patient):
         patient.
         """
 
-        # TODO
-
+        return self.administeredDrugs
 
     def getResistPop(self, drugResist):
         """
