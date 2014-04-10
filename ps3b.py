@@ -431,12 +431,7 @@ class TreatedPatient(Patient):
 
         offsprings = []
         for v in self.viruses:
-#            isResistantToPresc = (not(False
-#                                      in [v.isResistantTo(drug)
-#                                          for drug
-#                                          in self.administeredDrugs]))
             try:
-                # if isResistantToPresc:
                 offsprings.append(v.reproduce
                                   (self.popDensity, self.administeredDrugs))
             except NoChildException:
@@ -445,15 +440,15 @@ class TreatedPatient(Patient):
         self.viruses.extend(offsprings)
 
         return self.getTotalPop()
-        # TODO
-
-
 
 #
 # PROBLEM 5
 #
-def simulationWithDrug(numViruses, maxPop, maxBirthProb, clearProb, resistances,
-                       mutProb, numTrials):
+
+
+def simulationWithDrug(numViruses, maxPop, maxBirthProb, clearProb,
+                       resistances, mutProb, numTrials):
+
     """
     Runs simulations and plots graphs for problem 5.
 
@@ -475,4 +470,33 @@ def simulationWithDrug(numViruses, maxPop, maxBirthProb, clearProb, resistances,
 
     """
 
-    # TODO
+    # average number of viruses given by simulations
+    times = range(300)
+    treatementTime = 150
+    drug = 'guttagonol'
+    viruses_sum = [0] * len(times)
+    viruses_resistant_sum = [0] * len(times)
+    for trial in range(numTrials):
+        viruses = [ResistantVirus(maxBirthProb, clearProb,
+                                  resistances, mutProb)
+                   for v in range(numViruses)]
+        patient = TreatedPatient(viruses, maxPop)
+        for time in times:
+            if time == treatementTime:
+                patient.addPrescription(drug)
+            viruses_sum[time] += patient.update()
+            viruses_resistant_sum[time] += patient.getResistPop([drug])
+
+    viruses_avg = [vsum / float(numTrials) for vsum in viruses_sum]
+    viruses_resistant_avg = [vsum / float(numTrials)
+                             for vsum in viruses_resistant_sum]
+    # print viruses_avg
+    # print viruses_resistant_avg
+    # plotting
+    pylab.plot(times, viruses_avg, label="Total")
+    pylab.plot(times, viruses_resistant_avg, label="Resistant viruses")
+    pylab.title("ResistantVirus simulation")
+    pylab.legend("Average number of viruses")
+    pylab.xlabel("time step")
+    pylab.ylabel("# viruses")
+    pylab.show()
