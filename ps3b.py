@@ -8,6 +8,7 @@ import pylab
 Begin helper code
 '''
 
+
 class NoChildException(Exception):
     """
     NoChildException is raised by the reproduce() method in the SimpleVirus
@@ -269,7 +270,7 @@ class ResistantVirus(SimpleVirus):
         otherwise.
         """
 
-        return self.resistances.get(drug)
+        return self.resistances.get(drug, False)
 
     def reproduce(self, popDensity, activeDrugs):
         """
@@ -392,8 +393,13 @@ class TreatedPatient(Patient):
         drugs in the drugResist list.
         """
 
-        # TODO
-
+        yes = 0
+        for virus in self.viruses:
+            isResistantToList = (not(False in [virus.isResistantTo(drug)
+                                               for drug in drugResist]))
+            if isResistantToList:
+                yes += 1
+        return yes
 
     def update(self):
         """
@@ -416,6 +422,29 @@ class TreatedPatient(Patient):
         integer)
         """
 
+        viruses_copy = [v for v in self.viruses]
+        for v in viruses_copy:
+            if v.doesClear():
+                self.viruses.remove(v)
+
+        self.popDensity = self.getTotalPop() / float(self.maxPop)
+
+        offsprings = []
+        for v in self.viruses:
+#            isResistantToPresc = (not(False
+#                                      in [v.isResistantTo(drug)
+#                                          for drug
+#                                          in self.administeredDrugs]))
+            try:
+                # if isResistantToPresc:
+                offsprings.append(v.reproduce
+                                  (self.popDensity, self.administeredDrugs))
+            except NoChildException:
+                pass
+
+        self.viruses.extend(offsprings)
+
+        return self.getTotalPop()
         # TODO
 
 
