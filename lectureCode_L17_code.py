@@ -1,4 +1,6 @@
-import pylab, random
+import pylab
+import random
+
 
 def getData(fileName):
     dataFile = open(fileName, 'r')
@@ -12,12 +14,13 @@ def getData(fileName):
     dataFile.close()
     return (masses, distances)
 
+
 def plotData(fileName):
     xVals, yVals = getData(fileName)
     xVals = pylab.array(xVals)
     yVals = pylab.array(yVals)
-    xVals = xVals*9.81 # convert mass to force (F = mg)
-    pylab.plot(xVals, yVals, 'bo', label = 'Measured displacements')
+    xVals = xVals * 9.81  # convert mass to force (F = mg)
+    pylab.plot(xVals, yVals, 'bo', label='Measured displacements')
     pylab.title('Measured Displacement of Spring')
     pylab.xlabel('Force (Newtons)')
     pylab.ylabel('Distance (meters)')
@@ -25,15 +28,16 @@ def plotData(fileName):
 ##plotData('springData.txt')
 ##pylab.show()
 
-def testErrors(ntrials=10000,npts=100):
+
+def testErrors(ntrials=10000, npts=100):
     results = [0] * ntrials
     for i in xrange(ntrials):
         s = 0   # sum of random points
         for j in xrange(npts):
-            s += random.triangular(-1,1)
-        results[i] =s
+            s += random.triangular(-1, 1)
+        results[i] = s
     # plot results in a histogram
-    pylab.hist(results,bins=50)
+    pylab.hist(results, bins=50)
     pylab.title('Sum of 100 random points -- Triangular PDF (10,000 trials)')
     pylab.xlabel('Sum')
     pylab.ylabel('Number of trials')
@@ -46,18 +50,19 @@ def fitData(fileName):
     xVals, yVals = getData(fileName)
     xVals = pylab.array(xVals)
     yVals = pylab.array(yVals)
-    xVals = xVals*9.81  # convert mass to force (F = mg)
-    pylab.plot(xVals, yVals, 'bo', label = 'Measured points')
+    xVals = xVals * 9.81  # convert mass to force (F = mg)
+    pylab.plot(xVals, yVals, 'bo', label='Measured points')
     pylab.title('Measured Displacement of Spring')
     pylab.xlabel('Force (Newtons)')
     pylab.ylabel('Distance (meters)')
-    a,b = pylab.polyfit(xVals, yVals, 1)  # fit y = ax + b
+    a, b = pylab.polyfit(xVals, yVals, 1)  # fit y = ax + b
     # use line equation to graph predicted values
-    estYVals = a*xVals + b
-    k = 1/a
-    pylab.plot(xVals, estYVals, label = 'Linear fit, k = '
-               + str(round(k, 5)))
-    pylab.legend(loc = 'best')
+    estYVals = a * xVals + b
+    k = 1 / a
+    r2 = rSquare(yVals, estYVals)
+    pylab.plot(xVals, estYVals, label='Linear fit, k = '
+               + str(round(k, 5)) + ' R2 = ' + str(round(r2, 5)))
+    pylab.legend(loc='best')
 
 ##fitData('springData.txt')
 ##pylab.show()
@@ -117,8 +122,9 @@ def fitData3(fileName):
     # use line equation to graph predicted values
     estYVals = a*xVals + b
     k = 1/a
+    r2 = rSquare(yVals, estYVals)
     pylab.plot(xVals, estYVals, label = 'Linear fit, k = '
-               + str(round(k, 5)))
+               + str(round(k, 5)) + ' R2 = ' + str(round(r2, 5)))
     pylab.legend(loc = 'best')
 
 ##fitData3('springData.txt')
@@ -196,5 +202,3 @@ def tryFits1(fName):
 
 ##tryFits1('launcherData.txt')
 ##pylab.show()
-
-
