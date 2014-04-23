@@ -97,16 +97,59 @@ class WeightedDigraph(Digraph):
 
     def __init__(self):
         Digraph.__init__(self)
+        self.edges = {}
+        self.children = {}
+
+    def addNode(self, node):
+        if node in self.nodes:
+            raise ValueError('Duplicate node')
+        else:
+            self.nodes.add(node)
+            self.children[node] = []
+            self.edges[node] = []
+
+    def addEdge(self, edge):
+        src = edge.getSource()
+        dest = edge.getDestination()
+        weights = edge.getWeights()
+        if not(src in self.nodes and dest in self.nodes):
+            raise ValueError('Node not in graph')
+        self.children[src].append(dest)
+        distancesTo = [dest, weights]
+        self.edges[src].append(distancesTo)
+
+    def childrenOf(self, node):
+        return self.children[node]
 
     def __str__(self):
-        pass
+        res = ''
+        for k in self.edges:
+            for d, ws in self.edges[k]:
+                diststances = (float(ws[0]), float(ws[1]))
+                res = '{0}{1}->{2} {3}\n'.format(res, k, d, diststances)
+        return res[:-1]
 
 
 class WeightedEdge(Edge):
 
-    def __init__(self, src, dest, distance, outdoorDistance):
-        self.distance = distance
+    def __init__(self, src, dest, totalDistance, outdoorDistance):
+        Edge.__init__(self, src, dest)
+        self.totalDistance = totalDistance
         self.outdoorDistance = outdoorDistance
+        self.weights = (totalDistance, outdoorDistance)
+
+    def getWeights(self):
+        return self.weights
+
+    def getTotalDistance(self):
+        return self.totalDistance
+
+    def getOutdoorDistance(self):
+        return self.outdoorDistance
 
     def __str__(self):
-        pass
+        return '{0}->{1} ({2}, {3})'.format(
+            self.src,
+            self.dest,
+            self.totalDistance,
+            self.outdoorDistance)
