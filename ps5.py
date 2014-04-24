@@ -67,7 +67,8 @@ def load_map(mapFilename):
 #
 
 
-def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
+def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors,
+                     path=[], shortest=None):
     """
     Finds the shortest path from start to end using brute-force approach.
     The total distance travelled on the path must not exceed maxTotalDist, and
@@ -92,9 +93,6 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
         maxDistOutdoors constraints, then raises a ValueError.
     """
 
-# def DFSShortest(graph, start, end, path = [], shortest = None):
-    #assumes graph is a Digraph
-    #assumes start and end are nodes in graph
     def sumTotalDistance(path):
         result = 0
         if path is None:
@@ -108,7 +106,7 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
                 if item[0] == dest:
                     item = str(item[1][0])
                     result += float(item)
-    return result
+        return result
 
     def sumOutdoorDistance(path):
         result = 0
@@ -125,11 +123,6 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
                     result += float(item)
         return result
 
-        pass
-
-    def shorterThan(path1, path2):
-        pass
-
     path = path + [start]
     print 'Current dfs path:', printPath(path)
     if start == end:
@@ -144,12 +137,15 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
             ):
 
                 newPath = bruteForceSearch(
-                    digraph, start, end, maxTotalDist, maxDistOutdoors)
+                    digraph, start, end, maxTotalDist, maxDistOutdoors,
+                    path, shortest)
                 if newPath is not None:
                     shortest = newPath
-    return shortest
 
-    pass
+    if (len(shortest) == 0):
+        raise ValueError
+    else:
+        return shortest
 
 #
 # Problem 4: Finding the Shorest Path using Optimized Search Method
