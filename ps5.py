@@ -59,7 +59,6 @@ def load_map(mapFilename):
     return g
 
 
-
 #
 # Problem 3: Finding the Shortest Path using Brute Force Search
 #
@@ -92,7 +91,22 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
         If there exists no path that satisfies maxTotalDist and
         maxDistOutdoors constraints, then raises a ValueError.
     """
-    #TODO
+
+# def DFSShortest(graph, start, end, path = [], shortest = None):
+    #assumes graph is a Digraph
+    #assumes start and end are nodes in graph
+    path = path + [start]
+    print 'Current dfs path:', printPath(path)
+    if start == end:
+        return path
+    for node in digraph.childrenOf(start):
+        if node not in path:  # avoid cycles
+            if shortest is None or len(path) < len(shortest):
+                newPath = DFSShortest(digraph, node, end, path, shortest)
+                if newPath is not None:
+                    shortest = newPath
+    return shortest
+
     pass
 
 #
