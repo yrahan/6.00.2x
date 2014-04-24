@@ -95,14 +95,56 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
 # def DFSShortest(graph, start, end, path = [], shortest = None):
     #assumes graph is a Digraph
     #assumes start and end are nodes in graph
+    def sumTotalDistance(path):
+        result = 0
+        if path is None:
+            return result
+        if len(path) == 0:
+            return result
+        for i in range(len(path) - 1):
+            src = path[i]
+            dest = path[i + 1]
+            for item in digraph.edges[src]:
+                if item[0] == dest:
+                    item = str(item[1][0])
+                    result += float(item)
+    return result
+
+    def sumOutdoorDistance(path):
+        result = 0
+        if path is None:
+            return result
+        if len(path) == 0:
+            return result
+        for i in range(len(path) - 1):
+            src = path[i]
+            dest = path[i + 1]
+            for item in digraph.edges[src]:
+                if item[0] == dest:
+                    item = str(item[1][1])
+                    result += float(item)
+        return result
+
+        pass
+
+    def shorterThan(path1, path2):
+        pass
+
     path = path + [start]
     print 'Current dfs path:', printPath(path)
     if start == end:
         return path
     for node in digraph.childrenOf(start):
         if node not in path:  # avoid cycles
-            if shortest is None or len(path) < len(shortest):
-                newPath = DFSShortest(digraph, node, end, path, shortest)
+            if (
+                (shortest is None or
+                 (sumOutdoorDistance(path) < sumOutdoorDistance(shorter))) and
+                (sumTotalDistance(path) < maxTotalDist) and
+                (sumOutdoorDistance(path) < maxDistOutdoors)
+            ):
+
+                newPath = bruteForceSearch(
+                    digraph, start, end, maxTotalDist, maxDistOutdoors)
                 if newPath is not None:
                     shortest = newPath
     return shortest
