@@ -112,11 +112,13 @@ class Cluster(object):
             result = result + p + ', '
         return result[:-2]
 
+
 class ClusterSet(object):
     """ A ClusterSet is defined as a list of clusters """
     def __init__(self, pointType):
         """ Initialize an empty set, without any clusters """
         self.members = []
+
     def add(self, c):
         """ Append a cluster to the end of the cluster list
         only if it doesn't already exist. If it is already in the
@@ -124,26 +126,43 @@ class ClusterSet(object):
         if c in self.members:
             raise ValueError
         self.members.append(c)
+
     def getClusters(self):
         return self.members[:]
+
     def mergeClusters(self, c1, c2):
         """ Assumes clusters c1 and c2 are in self
         Adds to self a cluster containing the union of c1 and c2
         and removes c1 and c2 from self """
-        # TO DO
-        pass
+        self.members.remove(c1)
+        self.members.remove(c2)
+        self.add(Cluster(c1.points + c2.points, c1.pointType))
+
     def findClosest(self, linkage):
         """ Returns a tuple containing the two most similar
         clusters in self
         Closest defined using the metric linkage """
         # TO DO
-        pass
+        minDist = float('inf')
+
+        clusters = self.getClusters()
+        for i in range(len(clusters)):
+            for j in range(i + 1, len(clusters)):
+                p = self.members[i]
+                q = self.members[j]
+                if linkage(p, q) < minDist:
+                    minDist = linkage(p, q)
+                    closestPair = (p, q)
+        return closestPair
+
     def mergeOne(self, linkage):
         """ Merges the two most simililar clusters in self
         Similar defined using the metric linkage
         Returns the clusters that were merged """
-        # TO DO
-        pass
+        (c1, c2) = self.findClosest(linkage)
+        self.mergeClusters(c1, c2)
+        return (c1, c2)
+
     def numClusters(self):
         return len(self.members)
     def toStr(self):
