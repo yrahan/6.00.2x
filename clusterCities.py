@@ -37,37 +37,52 @@ class Point(object):
     def toStr(self):
         return self.name + str(self.attrs)
     def __str__(self):
-        return self.name        
-    
+        return self.name
+
+
 class Cluster(object):
-    """ A Cluster is defines as a set of elements, all having 
+    """ A Cluster is defines as a set of elements, all having
     a particular type """
+
     def __init__(self, points, pointType):
         """ Elements of a cluster are saved in self.points
         and the pointType is also saved """
         self.points = points
         self.pointType = pointType
+
     def singleLinkageDist(self, other):
-        """ Returns the float distance between the points that 
-        are closest to each other, where one point is from 
-        self and the other point is from other. Uses the 
+        """ Returns the float distance between the points that
+        are closest to each other, where one point is from
+        self and the other point is from other. Uses the
         Euclidean dist between 2 points, defined in Point."""
-        # TO DO
-        pass
+        distances = []
+        for p1 in self.points:
+            for p2 in other.points:
+                distances.append(p1.distance(p2))
+        return min(distances)
+
     def maxLinkageDist(self, other):
-        """ Returns the float distance between the points that 
-        are farthest from each other, where one point is from 
-        self and the other point is from other. Uses the 
+        """ Returns the float distance between the points that
+        are farthest from each other, where one point is from
+        self and the other point is from other. Uses the
         Euclidean dist between 2 points, defined in Point."""
-        # TO DO
-        pass
+        distances = []
+        for p1 in self.points:
+            for p2 in other.points:
+                distances.append(p1.distance(p2))
+        return max(distances)
+
     def averageLinkageDist(self, other):
-        """ Returns the float average (mean) distance between all 
-        pairs of points, where one point is from self and the 
-        other point is from other. Uses the Euclidean dist 
+        """ Returns the float average (mean) distance between all
+        pairs of points, where one point is from self and the
+        other point is from other. Uses the Euclidean dist
         between 2 points, defined in Point."""
-        # TO DO
-        pass
+        distances = []
+        for p1 in self.points:
+            for p2 in other.points:
+                distances.append(p1.distance(p2))
+        return reduce(lambda x, y: x + y, distances) / float(len(distances))
+
     def members(self):
         for p in self.points:
             yield p
@@ -84,7 +99,7 @@ class Cluster(object):
             result = result + p.toStr() + ', '
         return result[:-2]
     def getNames(self):
-        """ For consistency, returns a sorted list of all 
+        """ For consistency, returns a sorted list of all
         elements in the cluster """
         names = []
         for p in self.points:
@@ -104,7 +119,7 @@ class ClusterSet(object):
         self.members = []
     def add(self, c):
         """ Append a cluster to the end of the cluster list
-        only if it doesn't already exist. If it is already in the 
+        only if it doesn't already exist. If it is already in the
         cluster set, raise a ValueError """
         if c in self.members:
             raise ValueError
@@ -118,7 +133,7 @@ class ClusterSet(object):
         # TO DO
         pass
     def findClosest(self, linkage):
-        """ Returns a tuple containing the two most similar 
+        """ Returns a tuple containing the two most similar
         clusters in self
         Closest defined using the metric linkage """
         # TO DO
@@ -160,19 +175,19 @@ def readCityData(fName, scale = False):
         numFeatures += 1
     numFeatures -= 1
     featureVals = []
-    
+
     #Produce featureVals, cityNames
     featureVals, cityNames = [], []
     for i in range(numFeatures):
         featureVals.append([])
-        
+
     #Continue processing lines in file, starting after comments
     for line in dataFile:
         dataLine = string.split(line[:-1], ',') #remove newline; then split
         cityNames.append(dataLine[0])
         for i in range(numFeatures):
             featureVals[i].append(float(dataLine[i+1]))
-            
+
     #Use featureVals to build list containing the feature vectors
     #For each city scale features, if needed
     if scale:
