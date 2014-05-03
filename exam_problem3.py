@@ -60,7 +60,7 @@ def foxGrowth():
         if (random.random() < 1 / 3.0):
             CURRENTFOXPOP += 1
     else:
-        if (CURRENTFOXPOP > 10 and random.random() < 1 / 10.0):
+        if (CURRENTFOXPOP > 10 and random.random() < 9 / 10.0):
             CURRENTFOXPOP -= 1
     pass
 
